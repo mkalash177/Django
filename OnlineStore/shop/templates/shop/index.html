@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+ {% block main %}
+
+    {% for list in lists %}
+
+        <div class="card mb-4">
+    <div class="card-header">
+        {{ list.name }}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{ list.name }}</h5>
+        <p class="card-text">{{ list.price }}$</p>
+         <p class="card-text">В наличии:{{ list.quantity_product }}</p>
+        {% if request.user.is_authenticated %}
+            <div>
+            <form action="{% url 'buy_product_url' list.id %}" method="post">
+                {% csrf_token %}
+                {{ Buy }}
+                <input class="btn btn-light" type="submit" value="Buy">
+{#                <a href="{% url 'buy_product_url' list.id %}" class="btn btn-light">Купить</a>#}
+                </form>
+
+            </div>
+        {% endif %}
+    {% if request.user.is_superuser %}
+        <a href="{% url 'charge_product_url' list.id %}" class="btn btn-light">Изменить</a>
+    {% endif %}
+    </div>
+</div>
+
+     {% endfor %}
+
+      {% endblock %}
