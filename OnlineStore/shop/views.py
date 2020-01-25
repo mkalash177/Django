@@ -1,17 +1,20 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
+from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 
-from shop.forms import ProductCreateForm, ProductBuyForm
-from shop.models import Product, Purchase
+from shop.forms import ProductCreateForm, ProductBuyForm, RegisterForm
+from shop.models import Product, Purchase, Person
 
 
 class RegisterCreateView(CreateView):
+    model = Person
     template_name = "shop/register.html"
-    form_class = UserCreationForm
+    form_class = RegisterForm
     success_url = "/login"
 
 
@@ -53,32 +56,37 @@ class ProductChargeView(UpdateView):
 
 
 class BuyProduct(CreateView):
-    # model = Purchase
+    http_method_names = ['get', 'post']
     form_class = ProductBuyForm
-    template_name = 'shop/my_buy_product.html'
-    success_url = '/'
-    product = None
+    success_url = '/myproduct'
+    info_product = None
 
     def post(self, request, *args, **kwargs):
-        self.product = Product.objects.get(id=kwargs.get('prod_id'))
+        self.info_product = Product.objects.get(id=kwargs.get('product_id'))
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.customer = self.request.user
-        obj.product = self.product
+        obj.info_user = self.request.user
+        obj.info_product = self.info_product
+        summ = int(self.request.POST.get('quantity_by_product')) * obj.info_product.price
+        if obj.info_user.cash < int(summ):
+            return HttpResponseRedirect('/myproduct')
+        if int(self.request.POST.get('quantity_by_product')) > obj.info_product.quantity_product:
+            return HttpResponseRedirect('/myproduct')
         obj.save()
-        return super().form_valid(form)
-    # def post(self, request, *args, **kwargs):
-    #     self.shop_product = Product.objects.all()
-    #     form = self.form_class(request.POST)
-    #     if form.is_valid():
-    #         order = form.save(commit=False)
-    #         for item in self.shop_product:
-    #             Purchase.objects.create(order=order,
-    #                                     info_user=item['info_user'],
-    #                                     info_product=item['info_product'],
-    #                                     quantity_by_product=item['quantity_by_product']
-    #                                     )
-    #         return render(request, 'shop/my_buy_product.html',
-    #                       {'form': form})
+        return HttpResponseRedirect('/myproduct')
+
+
+class MyProduct(ListView):
+    model = Product
+    paginate_by = 100
+    template_name = 'shop/my_buy_product.html'
+    queryset = Purchase.objects.all()
+    context_object_name = 'my_product'
+
+    def get_queryset(self):
+        if not self.request.user.is_superuser:
+            queryset = Purchase.objects.filter(info_user_id=self.request.user.id)
+            return queryset
+        return super().get_queryset()

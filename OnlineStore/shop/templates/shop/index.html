@@ -17,8 +17,7 @@
             <form action="{% url 'buy_product_url' list.id %}" method="post">
                 {% csrf_token %}
                 {{ Buy }}
-                <input class="btn btn-light" type="submit" value="Buy">
-{#                <a href="{% url 'buy_product_url' list.id %}" class="btn btn-light">Купить</a>#}
+                <input class="btn btn-light" type="submit" value="Купить">
                 </form>
 
             </div>

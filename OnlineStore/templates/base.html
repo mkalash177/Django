@@ -7,6 +7,7 @@
     <a href="{% url 'logout_url' %}">Выйти</a>
     {% else %}
     <a href="{% url 'login_url' %}">Войти</a>
+        <a href="{% url 'register_url' %}">Зарегистрируйся</a>
 {% endif %}
 {% if user.is_authenticated %}
     <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
@@ -30,6 +31,6 @@
      {% csrf_token %}
      <input class="btn btn-primary" type="submit" value="Создать">
      </form>
-
+ <a href="{% url 'my_buy_product_url' %}" class="btn btn-primary">Товары</a>
 </body>
 </html>

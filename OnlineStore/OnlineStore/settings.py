@@ -29,6 +29,8 @@ LOGIN_REDIRECT_URL = '/'
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'shop.Person'
+
 
 # Application definition
 

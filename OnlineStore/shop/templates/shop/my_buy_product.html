@@ -1,6 +1,29 @@
 {% extends 'base.html' %}
 
  {% block main %}
-        {{ purchase.info_product }}
+
+         {% csrf_token %}
+     <div class="card mb-4">
+    <div class="card-header">
+        {{ list.info_product }}
+    </div>
+          {% for list in my_product %}
+    <div class="card-body">
+        <h5 class="card-title">{{ list.info_product }} {{ list.info }}</h5>
+        <p class="card-text">{{ list.info_user }}</p>
+        <p class="card-text">{{ list.info_product.price }}</p>
+        <p class="card-text">{{ list.quantity_by_product}}</p>
+            <div>
+            <form action="#" method="post">
+                {% csrf_token %}
+
+                <input class="btn btn-light" type="submit" value="Возврат">
+                </form>
+            </div>
+    </div>
+     {% endfor %}
+</div>
+
+
 
       {% endblock %}
