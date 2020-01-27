@@ -4,7 +4,6 @@
     <list default="true" id="067e0422-0224-4a31-8738-038595848ca4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shop/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/shop/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shop/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/shop/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +107,7 @@
       <workItem from="1580051231192" duration="2311000" />
       <workItem from="1580131532839" duration="77000" />
       <workItem from="1580144961238" duration="1689000" />
-      <workItem from="1580150645292" duration="714000" />
+      <workItem from="1580150645292" duration="2447000" />
     </task>
     <servers />
   </component>

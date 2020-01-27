@@ -21,7 +21,7 @@
 {#                </form>#}
                  <form action="{% url 'my_purchase_returns' list.id%}" method="post">
                 {% csrf_token %}
-
+               
                 <input class="btn btn-light" type="submit" value="Вернуть товар">
                 </form>
             </div>

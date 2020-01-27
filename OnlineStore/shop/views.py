@@ -93,9 +93,9 @@ class MyProduct(ListView):
 
 class PurchaseReturns(CreateView):
     http_method_names = ['get', 'post']
-    template_name = 'shop/my_buy_product.html'
+    template_name = 'shop/product_create.html'
     form_class = PurchaseReturnsForm
-    success_url = reverse_lazy('my_buy_product_ur')
+    success_url = reverse_lazy('my_buy_product_url')
     return_product = None
 
     def post(self, request, *args, **kwargs):
