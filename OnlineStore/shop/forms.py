@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
-from shop.models import Product, Purchase, Person
+from shop.models import Product, Purchase, Person, ReturnProduct
 
 
 class ProductCreateForm(ModelForm):
@@ -30,3 +30,8 @@ class RegisterForm(UserCreationForm):
 
         for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
+
+class PurchaseReturnsForm(ModelForm):
+    class Meta:
+        model = ReturnProduct
+        fields = ['return_product','request_time']

@@ -1,9 +1,13 @@
+
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # User = get_user_model()
 # Create your models here.
+from django.utils import timezone
+
 
 class Person(AbstractUser):
     cash = models.PositiveIntegerField(default=10000)
@@ -40,8 +44,11 @@ class Purchase(models.Model):
 
 
 class ReturnProduct(models.Model):
-    return_product = models.OneToOneField(Purchase, on_delete=models.CASCADE)
-    request_time = models.DateTimeField(auto_now_add=True)
+    return_product = models.ForeignKey(Purchase, on_delete=models.CASCADE)
+    request_time = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['request_time']
 
     def __str__(self):
         return f"{self.return_product}"

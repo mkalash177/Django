@@ -14,10 +14,15 @@
         <p class="card-text">{{ list.info_product.price }}</p>
         <p class="card-text">{{ list.quantity_by_product}}</p>
             <div>
-            <form action="#" method="post">
+{#            <form action="#" method="post">#}
+{#                {% csrf_token %}#}
+{##}
+{#                <input class="btn btn-light" type="submit" value="Возврат">#}
+{#                </form>#}
+                 <form action="{% url 'my_purchase_returns' list.id%}" method="post">
                 {% csrf_token %}
 
-                <input class="btn btn-light" type="submit" value="Возврат">
+                <input class="btn btn-light" type="submit" value="Вернуть товар">
                 </form>
             </div>
     </div>

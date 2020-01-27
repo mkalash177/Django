@@ -7,8 +7,8 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 
-from shop.forms import ProductCreateForm, ProductBuyForm, RegisterForm
-from shop.models import Product, Purchase, Person
+from shop.forms import ProductCreateForm, ProductBuyForm, RegisterForm, PurchaseReturnsForm
+from shop.models import Product, Purchase, Person, ReturnProduct
 
 
 class RegisterCreateView(CreateView):
@@ -90,3 +90,32 @@ class MyProduct(ListView):
             queryset = Purchase.objects.filter(info_user_id=self.request.user.id)
             return queryset
         return super().get_queryset()
+
+
+
+class PurchaseReturns(CreateView):
+    http_method_names = ['get', 'post']
+    template_name = 'shop/my_buy_product.html'
+    form_class = PurchaseReturnsForm
+    success_url = reverse_lazy('my_buy_product_ur')
+    return_product = None
+
+    def post(self, request, *args, **kwargs):
+        self.return_products = ReturnProduct.objects.get(id=kwargs.get('returns_id'))
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.return_products = self.return_products
+        obj.save()
+        return HttpResponseRedirect(self.success_url)
+
+
+class ReturnsList(ListView):
+    model = ReturnProduct
+    paginate_by = 5
+    template_name = 'shop/my_purchase_returns.html'
+    queryset = ReturnProduct.objects.all()
+    context_object_name = 'returns_product'
+
+
