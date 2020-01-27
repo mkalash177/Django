@@ -34,4 +34,4 @@ class RegisterForm(UserCreationForm):
 class PurchaseReturnsForm(ModelForm):
     class Meta:
         model = ReturnProduct
-        fields = ['return_product','request_time']
+        fields = ['return_product']

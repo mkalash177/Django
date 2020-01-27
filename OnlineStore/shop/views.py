@@ -2,13 +2,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-
-# Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 
-from shop.forms import ProductCreateForm, ProductBuyForm, RegisterForm, PurchaseReturnsForm
-from shop.models import Product, Purchase, Person, ReturnProduct
+from shop.forms import *
+from shop.models import *
 
 
 class RegisterCreateView(CreateView):
@@ -101,12 +99,12 @@ class PurchaseReturns(CreateView):
     return_product = None
 
     def post(self, request, *args, **kwargs):
-        self.return_products = ReturnProduct.objects.get(id=kwargs.get('returns_id'))
+        self.return_product = Purchase.objects.get(id=kwargs.get('returns_id'))
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.return_products = self.return_products
+        obj.return_product = self.return_product
         obj.save()
         return HttpResponseRedirect(self.success_url)
 
