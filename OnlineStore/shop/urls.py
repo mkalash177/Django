@@ -1,3 +1,4 @@
+from . import views
 from django.urls import path, include
 
 from shop.views import *
@@ -12,5 +13,9 @@ urlpatterns = [
     path('product_create/', ProductCreateView.as_view(), name='product_create_url'),
     path('myproduct/', MyProduct.as_view(), name='my_buy_product_url'),
     path('returns/<int:returns_id>', PurchaseReturns.as_view(), name='my_purchase_returns'),
-    path('returnsuser/', ReturnsList.as_view(), name='returns_user_url')
+    path('returnsuser/', ReturnsList.as_view(), name='returns_user_url'),
+    # path('returnsuser/accept/<int:pk>', AcceptReturn.as_view(), name='accept'),
+    # path('returnsuser/reject/<int:pk>', RejectReturn.as_view(), name='reject')
+    path('returnsuser/reject/<int:pk>', RejectReturn.as_view(),  name='reject_return'),
+    path('returnsuser/accept/<int:pk>', AcceptReturn.as_view(),  name='access_return'),
 ]

@@ -1,11 +1,9 @@
-
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from datetime import timedelta, datetime
+import pytz
 
-# User = get_user_model()
-# Create your models here.
 from django.utils import timezone
 
 
@@ -32,20 +30,43 @@ class Purchase(models.Model):
     quantity_by_product = models.PositiveIntegerField(null=False, default=0)
     purchase_time = models.DateTimeField(auto_now_add=True)
 
+    def return_is_valid(self):
+        created_time = self.purchase_time
+        return_valid_time = created_time + timedelta(minutes=3)
+        if datetime.now(tz=pytz.UTC) <= return_valid_time:
+            return True
+        return False
+
+    def get_cost(self):
+        return self.info_product.price * self.quantity_by_product
+
+    def buy(self, price, quantity, info_product):
+        self.info_user.cash -= price * int(quantity)
+        self.info_user.save()
+        info_product.quantity_product -= int(quantity)
+        info_product.save()
+
+    def refund(self, order_item):
+        self.info_user.cash += order_item.info_product.price * order_item.quantity_by_product
+        self.info_user.save()
+        info_product = order_item.info_product
+        info_product.quantity_product += order_item.quantity_by_product
+        info_product.save()
+
+    # def save(self, force_insert=False, force_update=False, using=None,
+    #          update_fields=None):
+    #     self.info_product.quantity_product -= self.quantity_by_product
+    #     self.info_product.save()
+    #     return super().save(force_insert, force_update, using,
+    #          update_fields)
+
     def __str__(self):
         return f"{self.info_user, self.info_product}"
-
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        self.info_product.quantity_product -= self.quantity_by_product
-        self.info_product.save()
-        return super().save(force_insert, force_update, using,
-             update_fields)
 
 
 class ReturnProduct(models.Model):
     return_product = models.ForeignKey(Purchase, on_delete=models.CASCADE)
-    request_time = models.DateTimeField(default=timezone.now)
+    request_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['request_time']

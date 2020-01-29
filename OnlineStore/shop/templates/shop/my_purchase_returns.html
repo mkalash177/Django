@@ -2,24 +2,27 @@
 
 {% block main %}
 
-         <div class="card mb-4">
-    <div class="card-header">
-        {{ list.info_product }}
-    </div>
-          {% for return_list in returns_product %}
-    <div class="card-body">
-        <h5 class="card-title">{{ return_list.id }} {{ return_list.return_product }}</h5>
-        <p class="card-text">{{ return_list.name }}</p>
+    <div class="card mb-4" xmlns="http://www.w3.org/1999/html">
+        <div class="card-header">
+            {{ list.info_product }}
+        </div>
+        {% for return_list in returns_product %}
+            <div class="card-body">
+                <h5 class="card-title">{{ return_list.id }} {{ return_list.return_product }}</h5>
+                <p class="card-text">{{ return_list.name }}</p>
+                <form action="{% url 'access_return' return_list.return_product.id %}" method="post">
+                    {% csrf_token %}
 
+                    <input class="btn btn-light" type="submit" value="Принять">
+                </form>
+                <form action="{% url 'reject_return' return_list.id %}" method="post">
+                    {% csrf_token %}
 
-                 <form action="#" method="post">
-                {% csrf_token %}
-
-                <input class="btn btn-light" type="submit" value="Принять">
+                    <input class="btn btn-light" type="submit" value="отклонить">
                 </form>
             </div>
+            </div>
+        {% endfor %}
     </div>
-     {% endfor %}
-</div>
 
 {% endblock %}
