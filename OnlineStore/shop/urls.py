@@ -1,3 +1,6 @@
+from django.conf.urls.static import static
+
+from OnlineStore import settings
 from . import views
 from django.urls import path, include
 
@@ -14,8 +17,8 @@ urlpatterns = [
     path('myproduct/', MyProduct.as_view(), name='my_buy_product_url'),
     path('returns/<int:returns_id>', PurchaseReturns.as_view(), name='my_purchase_returns'),
     path('returnsuser/', ReturnsList.as_view(), name='returns_user_url'),
-    # path('returnsuser/accept/<int:pk>', AcceptReturn.as_view(), name='accept'),
-    # path('returnsuser/reject/<int:pk>', RejectReturn.as_view(), name='reject')
     path('returnsuser/reject/<int:pk>', RejectReturn.as_view(),  name='reject_return'),
     path('returnsuser/accept/<int:pk>', AcceptReturn.as_view(),  name='access_return'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

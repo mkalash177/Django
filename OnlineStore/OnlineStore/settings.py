@@ -27,6 +27,8 @@ DEBUG = True
 
 LOGIN_REDIRECT_URL = '/'
 
+STATIC_URL = '/static/'
+
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'shop.Person'
@@ -126,5 +128,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "templates/static"),
+]
 
-STATIC_URL = '/static/'
+
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL = '/media/'
+
+
+

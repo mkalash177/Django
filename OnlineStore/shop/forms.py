@@ -7,7 +7,7 @@ from shop.models import Product, Purchase, Person, ReturnProduct
 class ProductCreateForm(ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'product_description', 'price', 'quantity_product']
+        fields = ['name', 'product_description', 'price', 'quantity_product', 'image']
 
 
 class ProductBuyForm(ModelForm):

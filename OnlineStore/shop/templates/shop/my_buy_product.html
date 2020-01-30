@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 {% block main %}
 
     {% csrf_token %}
@@ -9,10 +10,14 @@
         </div>
         {% for list in my_product %}
             <div class="card-body">
-                <h5 class="card-title">{{ list.info_product }} {{ list.info }}</h5>
-                <p class="card-text">{{ list.info_user }}</p>
-                <p class="card-text">{{ list.info_product.price }}</p>
-                <p class="card-text">{{ list.quantity_by_product }}</p>
+                <div class="product">
+                    <div class="product-image">
+                        <img class="" src="{{ list.info_product.image.url }}" alt="">
+                    </div>
+                    <h5 class="card-title">{{ list.info_product.name }} {{ list.info }}</h5>
+                    <p class="card-text">Пользователь: {{ list.info_user }}</p>
+                    <p class="card-text">Цена за единицу: {{ list.info_product.price }}$</p>
+                    <p class="card-text">Количество: {{ list.quantity_by_product }}</p>
                 <div>
                     {% if list.is_returned %}
                         <sp>Запрос на возврат <strong>{{ list.returns.id }}</strong></sp>
@@ -21,11 +26,12 @@
                         <sp>{{ list.is_returned }}</sp>
                         <form action="{% url 'my_purchase_returns' list.id %}" method="post">
                             {% csrf_token %}
-                            <button type="submit" value="Return purchase">Return purchase</button>
+                            <button type="submit" value="Return purchase">Вернуть</button>
                             {#<input class="btn btn-light" type="submit" value="Вернуть товар">#}
                         </form>
                     {% endif %}
                 </div>
+            </div>
             </div>
         {% endfor %}
     </div>
