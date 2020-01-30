@@ -1,34 +1,35 @@
 {% extends 'base.html' %}
 
- {% block main %}
+{% block main %}
 
-         {% csrf_token %}
-     <div class="card mb-4">
-    <div class="card-header">
-        {{ list.info_product }}
-    </div>
-          {% for list in my_product %}
-    <div class="card-body">
-        <h5 class="card-title">{{ list.info_product }} {{ list.info }}</h5>
-        <p class="card-text">{{ list.info_user }}</p>
-        <p class="card-text">{{ list.info_product.price }}</p>
-        <p class="card-text">{{ list.quantity_by_product}}</p>
-            <div>
-{#            <form action="#" method="post">#}
-{#                {% csrf_token %}#}
-{##}
-{#                <input class="btn btn-light" type="submit" value="Возврат">#}
-{#                </form>#}
-                 <form action="{% url 'my_purchase_returns' list.id%}" method="post">
-                {% csrf_token %}
-
-                <input class="btn btn-light" type="submit" value="Вернуть товар">
-                </form>
+    {% csrf_token %}
+    <div class="card mb-4">
+        <div class="card-header">
+            {{ list.info_product }}
+        </div>
+        {% for list in my_product %}
+            <div class="card-body">
+                <h5 class="card-title">{{ list.info_product }} {{ list.info }}</h5>
+                <p class="card-text">{{ list.info_user }}</p>
+                <p class="card-text">{{ list.info_product.price }}</p>
+                <p class="card-text">{{ list.quantity_by_product }}</p>
+                <div>
+                    {% if list.is_returned %}
+                        <sp>Запрос на возврат <strong>{{ list.returns.id }}</strong></sp>
+                        <p>{{ list.is_returned }}</p>
+                    {% else %}
+                        <sp>{{ list.is_returned }}</sp>
+                        <form action="{% url 'my_purchase_returns' list.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" value="Return purchase">Return purchase</button>
+                            {#<input class="btn btn-light" type="submit" value="Вернуть товар">#}
+                        </form>
+                    {% endif %}
+                </div>
             </div>
+        {% endfor %}
     </div>
-     {% endfor %}
-</div>
 
 
 
-      {% endblock %}
+{% endblock %}

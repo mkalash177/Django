@@ -1,36 +1,93 @@
 <!doctype  html>
-<html  lang="en">
+<html lang="en">
 <head>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<title>Shop</title>
-    {% if user.username %}
-    <a href="{% url 'logout_url' %}">Выйти</a>
-    {% else %}
-    <a href="{% url 'login_url' %}">Войти</a>
-        <a href="{% url 'register_url' %}">Зарегистрируйся</a>
-{% endif %}
-{% if user.is_authenticated %}
-    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
-{% else %}
-    <p>Welcome, new user. Please log in.</p>
-{% endif %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Shop</title>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+                aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'product_list_url' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_buy_product_url' %}">Мои покупки</a>
+                    </li>
+                {% endif %}
+                {% if request.user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_create_url' %}">Добавить товар</a>
+                    </li>
+                {% endif %}
+             {% if request.user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'returns_user_url' %}">Возвраты</a>
+                    </li>
+                {% endif %}
+            {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Баланс: {{ request.user.cash }}</a>
+                </li>
+            {% endif %}
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                {% if user.username %}
+                    <a class="nav-link" href="{% url 'logout_url' %}">Выйти</a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'login_url' %}">Войти</a>
+                    <a class="nav-link" href="{% url 'register_url' %}">Зарегистрируйся</a>
+                {% endif %}
+                {#      <input class="form-control mr-sm-2" type="search" placeholder="Search">#}
+                {#      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>#}
+            </form>
+        </div>
+    </nav>
+
+
+    {#    {% if user.username %}#}
+    {#    <a href="{% url 'logout_url' %}">Выйти</a>#}
+    {#    {% else %}#}
+    {#    <a href="{% url 'login_url' %}">Войти</a>#}
+    {#        <a href="{% url 'register_url' %}">Зарегистрируйся</a>#}
+    {#{% endif %}#}
+    {#{% if user.is_authenticated %}#}
+    {#    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>#}
+    {#{% else %}#}
+    {#    <p>Welcome, new user. Please log in.</p>#}
+    {#{% endif %}#}
 </head>
 <body>
-  <div  class="container">
-    <div  class="row justify-content-center">
-      <div  class="col-4">
-      <h1  class="text-center">Online Shop</h1>
-      {% block main %}
-      {% endblock %}
-      </div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <h1 class="text-center">Online Shop</h1>
+            {% block main %}
+            {% endblock %}
+        </div>
     </div>
-  </div>
+</div>
+<div  class="container">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                 <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+  <div  class="row justify-content-center">
 
-<form method="post" action="{% url 'product_create_url' %}">
-     {{ create_form }}
-     {% csrf_token %}
-     <input class="btn btn-primary" type="submit" value="Создать">
-     </form>
- <a href="{% url 'my_buy_product_url' %}" class="btn btn-primary">Товары</a>
+{#<form method="post" action="{% url 'product_create_url' %}">#}
+{#     {{ create_form }}#}
+{#     {% csrf_token %}#}
+{#     <input class="btn btn-primary" type="submit" value="Создать">#}
+{#     </form>#}
+{# <a href="{% url 'my_buy_product_url' %}" class="btn btn-primary">Товары</a>#}
 </body>
 </html>

@@ -27,8 +27,9 @@ class Product(models.Model):
 class Purchase(models.Model):
     info_user = models.ForeignKey(Person, on_delete=models.CASCADE)
     info_product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity_by_product = models.PositiveIntegerField(null=False, default=0)
+    quantity_by_product = models.PositiveIntegerField(null=False, default=1)
     purchase_time = models.DateTimeField(auto_now_add=True)
+    is_returned = models.CharField(max_length=100, default='')
 
     def return_is_valid(self):
         created_time = self.purchase_time
@@ -53,19 +54,14 @@ class Purchase(models.Model):
         info_product.quantity_product += order_item.quantity_by_product
         info_product.save()
 
-    # def save(self, force_insert=False, force_update=False, using=None,
-    #          update_fields=None):
-    #     self.info_product.quantity_product -= self.quantity_by_product
-    #     self.info_product.save()
-    #     return super().save(force_insert, force_update, using,
-    #          update_fields)
+
 
     def __str__(self):
         return f"{self.info_user, self.info_product}"
 
 
 class ReturnProduct(models.Model):
-    return_product = models.ForeignKey(Purchase, on_delete=models.CASCADE)
+    return_product = models.OneToOneField(Purchase, on_delete=models.CASCADE,related_name='returns')
     request_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:

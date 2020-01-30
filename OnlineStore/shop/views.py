@@ -22,7 +22,12 @@ class Login(LoginView):
 
 
 class Logout(LogoutView):
+    http_method_names = ['get']
     template_name = '/'
+
+    def get(self, *args, **kwargs):
+        super().get(*args, **kwargs)
+        return redirect('product_list_url')
 
 
 class ProductListView(ListView):
@@ -70,8 +75,10 @@ class BuyProduct(CreateView):
         obj.info_product = self.info_product
         summ = int(self.request.POST.get('quantity_by_product')) * obj.info_product.price
         if obj.info_user.cash < int(summ):
+            messages.error(self.request, "Недостаточно денег")
             return HttpResponseRedirect('/myproduct')
         if int(self.request.POST.get('quantity_by_product')) > obj.info_product.quantity_product:
+            messages.error(self.request, "Недостаточно товара на складе")
             return HttpResponseRedirect('/myproduct')
         obj.buy(price=self.info_product.price, quantity=self.request.POST.get('quantity_by_product'),
                 info_product=self.info_product)
@@ -99,27 +106,17 @@ class PurchaseReturns(CreateView):
     form_class = PurchaseReturnsForm
     success_url = reverse_lazy('my_buy_product_url')
 
-    # def post(self, request, *args, **kwargs):
-    #     self.return_product = Purchase.objects.get(id=kwargs.get('returns_id'))
-    #     return super().post(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
         order_item = Purchase.objects.get(id=self.kwargs['returns_id'])
         if not order_item.return_is_valid():
-            messages.error(request, f"Sorry, it is too late to return the order item.")
+            messages.error(request, f"Прошло много времени.")
             return redirect('my_buy_product_url')
-        order_item.is_returned = 'It is reviewing by admin. Please wait.'
+        order_item.is_returned = 'На рассмотрении.'
         return_request = ReturnProduct()
         return_request.return_product = order_item
         return_request.save()
         order_item.save()
         return redirect('my_buy_product_url')
-
-    # def form_valid(self, form):
-    #     obj = form.save(commit=False)
-    #     obj.return_product = self.return_product
-    #     obj.save()
-    #     return HttpResponseRedirect(self.success_url)
 
 
 class ReturnsList(ListView):
@@ -159,7 +156,7 @@ class RejectReturn(DeleteView):
     def delete(self, request, *args, **kwargs):
         return_request = self.get_object()
         purchase_item = return_request.return_product
-        purchase_item.request_time = 'Your previous return request was denied by admin.'
+        purchase_item.request_time = 'запрос был отклонен'
         purchase_item.save()
         return super().delete(request, *args, **kwargs)
 
@@ -171,15 +168,4 @@ class RejectReturn(DeleteView):
             return True
         return False
 
-# def dismiss(request, pk):
-#     print(pk)
-#     return HttpResponse(pk)
-#
-#
-# def access(request, pk):
-#     rp = ReturnProduct.objects.get(pk=pk)
-#     re = Purchase.objects.get
-#     print(rp)
-#     print(re)
-#     return HttpResponseRedirect('/returnsuser')
 #
