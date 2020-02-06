@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for list in lists %}
+        <div class="card d-block mx-auto" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ list.topic }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Важность: {{ list.importance }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Пользователь: {{ list.user }}</h6>
+                <p class="card-text">{{ list.text }}</p>
+                <a href="#" class="card-link">Принять</a>
+                <a href="#" class="card-link">Отклонить</a>
+                <a href="{% url 'statement_change_url' list.pk %}" class="card-link">изменить</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
