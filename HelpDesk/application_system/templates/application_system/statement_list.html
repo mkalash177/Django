@@ -5,12 +5,26 @@
         <div class="card d-block mx-auto" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card-title">{{ list.topic }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Важность: {{ list.importance }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Важность: {{ list.get_importance_display }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted">Пользователь: {{ list.user }}</h6>
                 <p class="card-text">{{ list.text }}</p>
-                <a href="#" class="card-link">Принять</a>
-                <a href="#" class="card-link">Отклонить</a>
-                <a href="{% url 'statement_change_url' list.pk %}" class="card-link">изменить</a>
+                <div class="btn-group">
+                    {% if list.progress %}
+                        {#                        <sp>Номер <strong>{{ list.id }} </strong></sp>#}
+                        <p>{{ list.progress }}</p>
+                    {% else %}
+                        <sp>{{ list.progress }}</sp>
+                            <form action="{% url 'accept_decision' list.id%}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-secondary btn-sm">Принять}</button>
+                            </form>
+                            <form action="{% url 'reject_decision' list.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-secondary btn-sm">отклонить</button>
+                            </form>
+                        <a href="{% url 'statement_change_url' list.pk %}" class="btn btn-secondary btn-sm">изменить</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     {% endfor %}
