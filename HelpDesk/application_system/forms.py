@@ -14,4 +14,11 @@ class StatementCreateForm(ModelForm):
 class DecisionCreateForm(ModelForm):
     class Meta:
         model = Decision
-        exclude = ['decision', 'is_active']
+        fields = ['comment']
+        # exclude = ['decision', 'is_active']
+
+
+# class RenewCreateForm(ModelForm):
+#     class Meta:
+#         model = RenewStatement
+#         exclude = ['renew']

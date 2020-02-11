@@ -8,8 +8,13 @@ urlpatterns = [
     path('statement/', StatementListView.as_view(), name='statement_list_url'),
     path('change/<int:pk>', StatementChargeView.as_view(), name='statement_change_url'),
     path('statement/reject/<int:pk>', RejectDecision.as_view(), name='reject_decision'),
-    path('statement/accept/<int:id>', AcceptDecision.as_view(), name='accept_decision'),
-    path('statement/acceptlist', AcceptDecisionList.as_view(), name='accept_decision_url')
+    path('statement/accept/<int:pk>', AcceptDecision.as_view(), name='accept_decision'),
+    path('statement/acceptlist', AcceptDecisionList.as_view(), name='accept_decision_url'),
+    path('statement/rejecttlist', RejectDecisionList.as_view(), name='reject_decision_url'),
+    path('statement/renew/<int:pk>', RenewCreateView.as_view(), name='renew_decision'),
+    path('statement/renewlist', RenewListView.as_view(), name='renew_decision_url'),
+    path('statement/renewaccept/<int:pk>', RenewAcceptView.as_view(), name='renew_accept_decision'),
+    path('statement/renewreject/<int:pk>', RenewARejectView.as_view(), name='renew_reject_decision')
 ]
 
 # statement_list_url

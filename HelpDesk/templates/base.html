@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>HelpDesk</title>
-    <header>
+</head>
+<body>
+ <header>
         <nav class="navbar navbar-dark bg-dark">
             <a class="navbar-brand" href="{% url 'index_url' %}">HelpDesk</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -25,7 +27,10 @@
                         <a class="nav-link" href="{% url 'accept_decision_url' %}">Принятные Заявки</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Отклоненные Заявки</a>
+                        <a class="nav-link" href="{% url 'reject_decision_url' %}">Отклоненные Заявки</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'renew_decision_url' %}">Востановленые Заявки</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
@@ -34,8 +39,6 @@
             </div>
         </nav>
     </header>
-</head>
-<body>
 <h1></h1>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

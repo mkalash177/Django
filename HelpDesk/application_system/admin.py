@@ -5,3 +5,4 @@ from application_system.models import *
 
 admin.site.register(Statement)
 admin.site.register(Decision)
+# admin.site.register(RenewStatement)

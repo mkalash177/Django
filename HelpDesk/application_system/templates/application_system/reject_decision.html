@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for r_list in reject_lists %}
+        <div class="card d-block mx-auto" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ r_list.decision.topic }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Важность: {{ r_list.decision.get_importance_display }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Пользователь: {{ r_list.decision.user }}</h6>
+                 <h6 class="card-subtitle mb-2 text-muted">Коментарий: {{ r_list.comment }}</h6>
+                {% if r_list.is_active == '4' %}
+                        <p>{{ r_list.decision.progress }}</p>
+                    {% else %}
+{#                        <sp>{{ list.progress }}</sp>#}
+                <p class="card-text">Отклонено</p>
+                <form action="{% url 'renew_decision' r_list.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-secondary btn-sm">Возобновить</button>
+                        <input type="hidden" name="is_active" value="0">
+                        {{ comment }}
+
+                        </form>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
