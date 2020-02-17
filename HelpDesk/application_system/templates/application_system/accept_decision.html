@@ -4,9 +4,9 @@
     {% for a_list in accept_lists %}
         <div class="card d-block mx-auto" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title">{{ a_list.decision.topic }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Важность: {{ a_list.decision.get_importance_display }}</h6>
-                <h6 class="card-subtitle mb-2 text-muted">Пользователь: {{ a_list.decision.user }}</h6>
+                <h5 class="card-title">{{ a_list.topic }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Важность: {{ a_list.get_importance_display }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Пользователь: {{ a_list.user }}</h6>
                 <p class="card-text">Принятно</p>
             </div>
         </div>

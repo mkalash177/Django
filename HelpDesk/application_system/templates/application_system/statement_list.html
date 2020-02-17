@@ -15,19 +15,20 @@
                         <sp>{{ list.progress }}</sp>
                         <form action="{% url 'accept_decision' list.id %}" method="post">
                             {% csrf_token %}
-                             <button type="submit" class="btn btn-secondary btn-sm">Принять</button>
+                            <button type="submit" class="btn btn-secondary btn-sm">Принять</button>
                             <input type="hidden" name="is_active" value="1">
                         </form>
                         <form action="{% url 'reject_decision' list.id %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-secondary btn-sm">Отклонить</button>
-                        <input type="hidden" name="is_active" value="0">
-                        {{ comment }}
-
+                            <input type="hidden" name="is_active" value="0">
+                            {{ comment }}
                         </form>
                         <a href="{% url 'statement_change_url' list.pk %}" class="btn btn-secondary btn-sm">изменить</a>
+                        <a href="{% url 'statement_detail_url' list.pk %}" class="btn btn-secondary btn-sm">Подробнее</a>
                     {% endif %}
                 </div>
+
             </div>
         </div>
     {% endfor %}

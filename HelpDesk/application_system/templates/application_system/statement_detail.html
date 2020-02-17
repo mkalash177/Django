@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card d-block mx-auto" style="width: 18rem;" xmlns="http://www.w3.org/1999/html">
+        <div class="card-body">
+            <h5 class="card-title">{{ statement.topic }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Важность: {{ statement.text }}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Пользователь: {{ statement.user }}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">{{ statement.text }}</h6>
+            <p class="card-text"></p>
+            <div class="btn-group">
+            </div>
+                        {% for comments in newcomments %}
+                            <div class="comment">
+                                <p class="info">
+                                    Comment {{ forloop.counter }} by {{ comments.author }}
+                                </p>
+                                {{ comments.content|linebreaks }}
+                            </div>
+                        {% empty %}
+                            <p>There are no comments yet.</p>
+                        {% endfor %}
+
+{#            <ul class="media-list">#}
+{#                {% for comments in newcomments %}#}
+{#                    <li class="media">#}
+{#                        <div class="media-body">#}
+{#                            <div class="media-heading">#}
+{#                                <div class="author">{{ comments.author.username }}#}
+{#                                    {% if comments.user.is_superuser %} (Admin){% endif %}</div>#}
+{#                                <div class="metadata">#}
+{##}
+{#                                </div>#}
+{#                                <div class="media-text text-justify">{{ comments.content|linebreaks }}</div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </li>#}
+{#                {% empty %}#}
+{#                    <p>There is not any comment yet...</p>#}
+{#                {% endfor %}#}
+{#            </ul>#}
+{#        </div>#}
+
+        <h2>Add a new comment</h2>
+        <form action="{% url 'comment_create' %}" method="post">
+            {{ comment.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Add comment"></p>
+        </form>
+
+    </div>
+    </div>
+{% endblock %}

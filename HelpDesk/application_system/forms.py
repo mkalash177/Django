@@ -8,17 +8,18 @@ class StatementCreateForm(ModelForm):
     class Meta:
         model = Statement
         # fields = ['importance', 'topic', 'text','user']
-        exclude = ['user', 'progress']
+        exclude = ['user', 'progress', 'is_active']
 
 
-class DecisionCreateForm(ModelForm):
-    class Meta:
-        model = Decision
-        fields = ['comment']
-        # exclude = ['decision', 'is_active']
-
-
-# class RenewCreateForm(ModelForm):
+# class DecisionCreateForm(ModelForm):
 #     class Meta:
-#         model = RenewStatement
-#         exclude = ['renew']
+#         model = Decision
+#         # fields = ['comment']
+#         exclude = ['decision', 'is_active']
+
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = NewComment
+        fields = ['content']
+        # exclude = ['comments', 'author']

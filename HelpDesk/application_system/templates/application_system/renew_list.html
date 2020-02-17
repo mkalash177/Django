@@ -4,16 +4,13 @@
     {% for list in renew_list %}
         <div class="card d-block mx-auto" style="width: 18rem;" xmlns="http://www.w3.org/1999/html">
             <div class="card-body">
-                <h5 class="card-title">{{ list.decision.topic }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Важность: {{ list.desicion.get_importance_display }}</h6>
-                <h6 class="card-subtitle mb-2 text-muted">Пользователь: {{ list.decision.user }}</h6>
-                <h6 class="card-subtitle mb-2 text-muted">Коментарии: {{ list.comment }}</h6>
+                <h5 class="card-title">{{ list.topic }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Важность: {{ list.get_importance_display }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Пользователь: {{ list.user }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Коментарии:</h6>
                 <p class="card-text">{{ list.text }}</p>
                 <div class="btn-group">
-                    {% if list.progress %}
-                        <p>{{ list.progress }}</p>
-                    {% else %}
-                        <sp>{{ list.progress }}</sp>
+                    {% if list.is_active == '3' %}
                         <form action="{% url 'renew_accept_decision' list.id %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-secondary btn-sm">Принять</button>
@@ -21,8 +18,9 @@
                         <form action="{% url 'renew_reject_decision' list.id %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-secondary btn-sm">Отклонить</button>
-                        {{ comment }}
                         </form>
+                    {% else %}
+                        <p>{{ list.progress }}</p>
                     {% endif %}
                 </div>
             </div>

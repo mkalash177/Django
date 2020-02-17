@@ -23,20 +23,22 @@ class Statement(models.Model):
     text = models.TextField(max_length=500)
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     progress = models.CharField(max_length=100, default='')
+    is_active = models.CharField(choices=IS_ACTIVE, max_length=10)
 
     def __str__(self):
         return f"{self.topic},{self.text}"
 
 
 #           """Результат решения"""
-class Decision(models.Model):
-    decision = models.OneToOneField(Statement, on_delete=models.CASCADE)
-    is_active = models.CharField(choices=IS_ACTIVE, max_length=10)
-    comment = models.CharField(max_length=255, null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.decision.topic},{self.is_active}"
-
+# class Decision(models.Model):
+#     decision = models.OneToOneField(Statement, on_delete=models.CASCADE)
+#     is_active = models.CharField(choices=IS_ACTIVE, max_length=10)
+#     comment = models.CharField(max_length=255, null=True, blank=True)
 #
-# class RenewStatement(models.Model):
-#     renew = models.OneToOneField(Decision, on_delete=models.CASCADE)
+#     def __str__(self):
+#         return f"{self.decision.topic},{self.is_active}"
+
+class NewComment(models.Model):
+    comments = models.ForeignKey(Statement, on_delete=models.CASCADE, related_name='newcomments', null=True)
+    author = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='newcomments')
+    content = models.TextField(max_length=255)

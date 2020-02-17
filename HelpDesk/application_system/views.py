@@ -3,10 +3,11 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, TemplateView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, TemplateView, UpdateView, DeleteView, DetailView
 
-from application_system.forms import StatementCreateForm, DecisionCreateForm
+from application_system.forms import *
 from application_system.models import *
+from rest_framework import viewsets
 
 
 # Кнопка Создать Заявку на index.html
@@ -47,12 +48,12 @@ class StatementListView(ListView):
     queryset = Statement.objects.all().order_by('-importance')
     context_object_name = 'lists'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'comment': DecisionCreateForm
-        })
-        return context
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context.update({
+    #         'comment': DecisionCreateForm
+    #     })
+    #     return context
 
     def get_queryset(self):
         if not self.request.user.is_superuser:
@@ -62,17 +63,15 @@ class StatementListView(ListView):
 
 
 class AcceptDecision(CreateView):
-    model = Decision
+    model = Statement
     success_url = '/statement/acceptlist'
     template_name = 'application_system/statement_list.html'
-    form_class = DecisionCreateForm
+    form_class = StatementCreateForm
 
     def post(self, request, *args, **kwargs):
-        decisions = Statement.objects.get(id=kwargs.get('pk'))
-        decisions.progress = 'Рассмотрено'
-        item = Decision()
+        item = Statement.objects.get(id=kwargs.get('pk'))
+        item.progress = 'Рассмотрено'
         item.is_active = 1
-        item.decision = decisions
         # form = self.get_form()
         # form_add = form.save(commit=False)
         # if form.data['is_active'] == '1':
@@ -89,7 +88,6 @@ class AcceptDecision(CreateView):
         #     return HttpResponseRedirect(self.success_url)
         # form.save()
         item.save()
-        decisions.save()
         # return super().post(request, *args, **kwargs)
         return redirect(self.success_url)
 
@@ -109,98 +107,134 @@ class AcceptDecision(CreateView):
 
 
 class AcceptDecisionList(ListView):
-    model = Decision
+    model = Statement
     template_name = 'application_system/accept_decision.html'
-    queryset = Decision.objects.filter(is_active=1)
+    queryset = Statement.objects.filter(is_active=1).order_by('-importance')
     context_object_name = 'accept_lists'
 
 
 class RejectDecision(CreateView):
-    model = Decision
+    model = Statement
     success_url = '/statement'
     template_name = 'application_system/statement_list.html'
-    form_class = DecisionCreateForm
+    form_class = StatementCreateForm
 
     def post(self, request, *args, **kwargs):
-        decisions = Statement.objects.get(id=kwargs.get('pk'))
-        decisions.progress = 'Рассмотрено'
-        item = Decision()
+        item = Statement.objects.get(id=kwargs.get('pk'))
+        item.progress = 'Рассмотрено'
+        # item.comment = self.request.POST.get('comment')
         item.is_active = 2
-        item.decision = decisions
         item.save()
-        decisions.save()
         return redirect(self.success_url)
 
 
 class RejectDecisionList(ListView):
-    model = Decision
+    model = Statement
     template_name = 'application_system/reject_decision.html'
-    queryset = Decision.objects.filter(is_active=2)
+    queryset = Statement.objects.filter(is_active__in=[2, 4]).order_by('-importance')
     context_object_name = 'reject_lists'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'comment': DecisionCreateForm
-        })
-        return context
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context.update({
+    #         'comment': DecisionCreateForm
+    #     })
+    #     return context
 
 
 #### до этого момента пока норм
 #### тут возобновление с ним шаманить
 class RenewCreateView(CreateView):
-    model = Decision
+    model = Statement
     success_url = '/statement'
     template_name = 'application_system/reject_decision.html'
-    form_class = Decision
+    form_class = StatementCreateForm
 
     def post(self, request, *args, **kwargs):
-        renews = Decision.objects.get(id=kwargs.get('pk'))
-        renews.decision.progress = 'В обработке'
+        renews = Statement.objects.get(id=kwargs.get('pk'))
+        renews.progress = 'В обработке'
+        # renews.comment = self.request.POST.get('comment')
         renews.is_active = 3
         renews.save()
         return redirect(self.success_url)
 
 
 class RenewListView(ListView):
-    model = Decision
+    model = Statement
     template_name = 'application_system/renew_list.html'
-    queryset = Decision.objects.filter(is_active=3)
+    queryset = Statement.objects.filter(is_active=3)
     context_object_name = 'renew_list'
 
 
 ##########################################
 class RenewAcceptView(CreateView):
-    model = Decision
+    model = Statement
     template_name = "application_system/renew_list.html"
     success_url = '/statement/renewlist'
-    form_class = DecisionCreateForm
+    form_class = StatementCreateForm
     renews = None
 
     def post(self, request, *args, **kwargs):
-        renews = Decision.objects.get(id=kwargs.get('pk'))
+        renews = Statement.objects.get(id=kwargs.get('pk'))
         renews.is_active = 1
         renews.save()
         return redirect(self.success_url)
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'comment': DecisionCreateForm
-        })
-        return context
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context.update({
+    #         'comment': CommentForm
+    #     })
+    #     return context
 
 
 class RenewARejectView(CreateView):
-    model = Decision
+    model = Statement
     template_name = "application_system/renew_list.html"
     success_url = '/statement/renewlist'
-    form_class = DecisionCreateForm
+    form_class = StatementCreateForm
     renews = None
 
     def post(self, request, *args, **kwargs):
-        renews = Decision.objects.get(id=kwargs.get('pk'))
+        renews = Statement.objects.get(id=kwargs.get('pk'))
         renews.is_active = 4
-        renews.decision.progress = 'откончательно решено'
+        renews.progress = 'откончательно решено'
         renews.save()
         return redirect(self.success_url)
+
+
+class StatementDetail(DetailView):
+    model = Statement
+    template_name = 'application_system/statement_detail.html'
+    context_object_name = 'statement'
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context.update({'newcomments': NewComment.objects.all(),
+                        'comment': CommentForm, })
+        return context
+
+
+class CommentCreateView(CreateView):
+    form_class = CommentForm
+    template_name = 'application_system/statement_detail.html'
+    request_obj = None
+
+    def form_valid(self, form):
+        form.instance.comments = self.request_obj
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return str(self.request.META.get('HTTP_REFERER'))
+
+
+class StatementViewSet(viewsets.ModelViewSet):
+    queryset = Statement.objects.all()
+    serializer_class = StatementSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def perform_update(self, serializer):
+        serializer.save()
