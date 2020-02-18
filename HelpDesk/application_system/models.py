@@ -39,6 +39,6 @@ class Statement(models.Model):
 #         return f"{self.decision.topic},{self.is_active}"
 
 class NewComment(models.Model):
-    comments = models.ForeignKey(Statement, on_delete=models.CASCADE, related_name='newcomments', null=True)
-    author = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='newcomments')
+    statements = models.ForeignKey(Statement, on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     content = models.TextField(max_length=255)

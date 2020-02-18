@@ -9,7 +9,7 @@ class StatementSerializer(serializers.ModelSerializer):
         fields = ['id', 'importance', 'topic', 'text', 'user', 'progress']
 
 
-# class DecisionSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Decision
-#         fields = ['id', 'decision', 'is_active', 'comment']
+class NewCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewComment
+        fields = ['id', 'comments', 'author', 'content']

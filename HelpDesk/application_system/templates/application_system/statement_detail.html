@@ -10,44 +10,25 @@
             <p class="card-text"></p>
             <div class="btn-group">
             </div>
-                        {% for comments in newcomments %}
-                            <div class="comment">
-                                <p class="info">
-                                    Comment {{ forloop.counter }} by {{ comments.author }}
-                                </p>
-                                {{ comments.content|linebreaks }}
-                            </div>
-                        {% empty %}
-                            <p>There are no comments yet.</p>
-                        {% endfor %}
-
-{#            <ul class="media-list">#}
-{#                {% for comments in newcomments %}#}
-{#                    <li class="media">#}
-{#                        <div class="media-body">#}
-{#                            <div class="media-heading">#}
-{#                                <div class="author">{{ comments.author.username }}#}
-{#                                    {% if comments.user.is_superuser %} (Admin){% endif %}</div>#}
-{#                                <div class="metadata">#}
-{##}
-{#                                </div>#}
-{#                                <div class="media-text text-justify">{{ comments.content|linebreaks }}</div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </li>#}
-{#                {% empty %}#}
-{#                    <p>There is not any comment yet...</p>#}
-{#                {% endfor %}#}
-{#            </ul>#}
-{#        </div>#}
-
-        <h2>Add a new comment</h2>
-        <form action="{% url 'comment_create' %}" method="post">
-            {{ comment.as_p }}
-            {% csrf_token %}
-            <p><input type="submit" value="Add comment"></p>
-        </form>
-
-    </div>
+            {% for comments in newcomments %}
+                <div class="comment">
+                    <p class="info">
+                        Comment {{ forloop.counter }} by {{ comments.author }}
+                    </p>
+                    {{ comments.content|linebreaks }}
+                </div>
+            {% empty %}
+                <p>There are no comments yet.</p>
+            {% endfor %}
+            <h2>Add a new comment</h2>
+            <form action="{% url 'comment_create' %}" method="post">
+                {#            {{ comment.as_p }}#}
+                {% csrf_token %}
+                <p><label for="id_content">Comment</label></p>
+                <textarea name="content" cols="40" rows="10" maxlength="255" required="" id="id_content"></textarea>
+                <input type=hidden name="statement" value={{ statement.id }}>
+                <p><input type="submit" value="Add comment"></p>
+            </form>
+        </div>
     </div>
 {% endblock %}

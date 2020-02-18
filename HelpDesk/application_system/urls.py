@@ -17,6 +17,7 @@ urlpatterns = [
     path('statement/renewreject/<int:pk>', RenewARejectView.as_view(), name='renew_reject_decision'),
     path('statement/statementndetail/<int:pk>', StatementDetail.as_view(), name='statement_detail_url'),
     path('createcomment/', CommentCreateView.as_view(), name='comment_create')
+
 ]
 
 # statement_list_url

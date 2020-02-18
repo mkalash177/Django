@@ -17,7 +17,7 @@ class RegisterCreateView(CreateView):
 
 class Login(LoginView):
     template_name = 'authenticate/login.html'
-    success_url = '/'
+    success_url = '/statement'
 
 
 class Logout(LogoutView):

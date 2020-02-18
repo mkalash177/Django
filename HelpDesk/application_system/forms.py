@@ -21,5 +21,7 @@ class StatementCreateForm(ModelForm):
 class CommentForm(ModelForm):
     class Meta:
         model = NewComment
-        fields = ['content']
-        # exclude = ['comments', 'author']
+        # fields = ['content']
+        exclude=['statements','author']
+
+
