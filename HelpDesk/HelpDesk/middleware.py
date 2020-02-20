@@ -6,7 +6,8 @@ class SimpleMiddleware:
         self.get_response = get_response
 
     def __call__(self, request, *args, **kwargs):
-        if request.user.is_authenticated or request.get_full_path().endswith('login/'):
+        valid = ['login/','register/']
+        if request.user.is_authenticated or request.get_full_path().endswith('login/') or request.get_full_path().endswith('register/'):
             response = self.get_response(request)
             return response
         return redirect('login_url')

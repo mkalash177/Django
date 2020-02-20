@@ -7,17 +7,17 @@
                 <h5 class="card-title">{{ r_list.topic }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Важность: {{ r_list.get_importance_display }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted">Пользователь: {{ r_list.user }}</h6>
-                <h6 class="card-subtitle mb-2 text-muted">Коментарий:</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Причина:{{ r_list.cause }}</h6>
                 {% if r_list.is_active == '4' %}
                     <p>{{ r_list.progress }}</p>
                 {% else %}
-                    {#                        <sp>{{ list.progress }}</sp>#}
                     <p class="card-text">Отклонено</p>
                     <form action="{% url 'renew_decision' r_list.pk %}" method="post">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-secondary btn-sm">Возобновить</button>
                         <input type="hidden" name="is_active" value="0">
                     </form>
+                    <a href="{% url 'statement_detail_url' r_list.pk %}" class="btn btn-secondary btn-sm">Подробнее</a>
                 {% endif %}
 
             </div>

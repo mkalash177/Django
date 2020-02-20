@@ -12,7 +12,7 @@ class RegisterCreateView(CreateView):
     model = MyUser
     template_name = "authenticate/register.html"
     form_class = RegisterForm
-    success_url = "/login"
+    success_url = "authenticate//login"
 
 
 class Login(LoginView):

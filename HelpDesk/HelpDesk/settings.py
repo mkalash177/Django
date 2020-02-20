@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'HelpDesk.middleware.SimpleMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'HelpDesk.middleware.SimpleMiddleware',
 
 ]
 
@@ -121,6 +122,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'authenticate.MyUser'
+LOGIN_URL = 'authenticate/login/'
+LOGIN_REDIRECT_URL = '/'
 
 # REST_FRAMEWORK = {
 #   'DEFAULT_AUTHENTICATION_CLASSES': (

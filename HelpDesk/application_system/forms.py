@@ -7,21 +7,19 @@ from application_system.models import *
 class StatementCreateForm(ModelForm):
     class Meta:
         model = Statement
-        # fields = ['importance', 'topic', 'text','user']
-        exclude = ['user', 'progress', 'is_active']
 
+        exclude = ['user', 'progress', 'is_active', 'cause']
 
-# class DecisionCreateForm(ModelForm):
-#     class Meta:
-#         model = Decision
-#         # fields = ['comment']
-#         exclude = ['decision', 'is_active']
+class Cause(ModelForm):
+    class Meta:
+        model = Statement
+
+        fields = ['cause']
 
 
 class CommentForm(ModelForm):
     class Meta:
         model = NewComment
-        # fields = ['content']
         exclude=['statements','author']
 
 

@@ -10,7 +10,7 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = MyUser
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
+        fields = ('username', 'first_name', 'last_name', 'sex', 'email', 'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

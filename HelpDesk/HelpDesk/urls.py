@@ -22,6 +22,7 @@ from rest_framework.routers import DefaultRouter
 
 from application_system import views
 
+
 router = DefaultRouter()
 router.register(r'statementapi', views.StatementViewSet)
 router.register(r'commentapi', views.NewCommentViewSet)

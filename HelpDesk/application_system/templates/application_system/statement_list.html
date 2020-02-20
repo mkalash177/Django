@@ -13,6 +13,7 @@
                         <p>{{ list.progress }}</p>
                     {% else %}
                         <sp>{{ list.progress }}</sp>
+                        {% if request.user.is_superuser %}
                         <form action="{% url 'accept_decision' list.id %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-secondary btn-sm">Принять</button>
@@ -22,10 +23,18 @@
                             {% csrf_token %}
                             <button type="submit" class="btn btn-secondary btn-sm">Отклонить</button>
                             <input type="hidden" name="is_active" value="0">
-                            {{ comment }}
+                            <input class="form-control" aria-label="Sizing example input"
+                                   aria-describedby="inputGroup-sizing-sm" type="text" name="cause" maxlength="100"
+                                   id="id_cause">
                         </form>
-                        <a href="{% url 'statement_change_url' list.pk %}" class="btn btn-secondary btn-sm">изменить</a>
-                        <a href="{% url 'statement_detail_url' list.pk %}" class="btn btn-secondary btn-sm">Подробнее</a>
+                            {% endif %}
+                        <div>
+                        {% if not request.user.is_superuser %}
+                         <p>   <a href="{% url 'statement_change_url' list.pk %}" class="btn btn-secondary btn-sm">изменить</a>
+                             {% endif %}
+                            <a href="{% url 'statement_detail_url' list.pk %}" class="btn btn-secondary btn-sm">Подробнее</a>
+                         </p>
+                        </div>
                     {% endif %}
                 </div>
 

@@ -22,10 +22,9 @@
             {% endfor %}
             <h2>Add a new comment</h2>
             <form action="{% url 'comment_create' %}" method="post">
-                {#            {{ comment.as_p }}#}
                 {% csrf_token %}
                 <p><label for="id_content">Comment</label></p>
-                <textarea name="content" cols="40" rows="10" maxlength="255" required="" id="id_content"></textarea>
+                <textarea class="form-control ms-3" name="content" cols="40" rows="10" maxlength="255" required="" id="id_content"></textarea>
                 <input type=hidden name="statement" value={{ statement.id }}>
                 <p><input type="submit" value="Add comment"></p>
             </form>

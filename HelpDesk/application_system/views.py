@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
@@ -24,7 +25,7 @@ class StatementCreateView(CreateView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.user = self.request.user
+        obj.user = MyUser.objects.get(id=self.request.user.id)
         obj.save()
         return HttpResponseRedirect(self.success_url)
 
@@ -48,21 +49,21 @@ class StatementListView(ListView):
     queryset = Statement.objects.all().order_by('-importance')
     context_object_name = 'lists'
 
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context.update({
-    #         'comment': DecisionCreateForm
-    #     })
-    #     return context
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'cause': Cause
+        })
+        return context
 
     def get_queryset(self):
         if not self.request.user.is_superuser:
-            queryset = Statement.objects.filter(info_user_id=self.request.user.id)
+            queryset = Statement.objects.filter(user_id=self.request.user.id)
             return queryset
         return super().get_queryset()
 
 
-class AcceptDecision(CreateView):
+class AcceptDecision(CreateView, UserPassesTestMixin):
     model = Statement
     success_url = '/statement/acceptlist'
     template_name = 'application_system/statement_list.html'
@@ -121,7 +122,7 @@ class AcceptDecisionList(ListView):
     context_object_name = 'accept_lists'
 
 
-class RejectDecision(CreateView):
+class RejectDecision(CreateView,UserPassesTestMixin):
     model = Statement
     success_url = '/statement'
     template_name = 'application_system/statement_list.html'
@@ -131,7 +132,8 @@ class RejectDecision(CreateView):
     def post(self, request, *args, **kwargs):
         item = Statement.objects.get(id=kwargs.get('pk'))
         item.progress = 'Рассмотрено'
-        # item.comment = self.request.POST.get('comment')
+
+        item.cause = self.request.POST.get('cause')
         item.is_active = 2
         item.save()
         return redirect(self.success_url)
@@ -183,7 +185,7 @@ class RenewListView(ListView):
 
 
 ##########################################
-class RenewAcceptView(CreateView):
+class RenewAcceptView(CreateView, UserPassesTestMixin):
     model = Statement
     template_name = "application_system/renew_list.html"
     success_url = '/statement/renewlist'
@@ -212,7 +214,7 @@ class RenewAcceptView(CreateView):
                 return True
 
 
-class RenewARejectView(CreateView):
+class RenewARejectView(CreateView, UserPassesTestMixin):
     model = Statement
     template_name = "application_system/renew_list.html"
     success_url = '/statement/renewlist'

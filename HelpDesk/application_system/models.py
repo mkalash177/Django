@@ -24,19 +24,12 @@ class Statement(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     progress = models.CharField(max_length=100, default='')
     is_active = models.CharField(choices=IS_ACTIVE, max_length=10)
+    cause = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f"{self.topic},{self.text}"
 
 
-#           """Результат решения"""
-# class Decision(models.Model):
-#     decision = models.OneToOneField(Statement, on_delete=models.CASCADE)
-#     is_active = models.CharField(choices=IS_ACTIVE, max_length=10)
-#     comment = models.CharField(max_length=255, null=True, blank=True)
-#
-#     def __str__(self):
-#         return f"{self.decision.topic},{self.is_active}"
 
 class NewComment(models.Model):
     statements = models.ForeignKey(Statement, on_delete=models.CASCADE, null=True)
