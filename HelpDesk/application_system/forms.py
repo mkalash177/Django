@@ -12,9 +12,9 @@ class StatementCreateForm(ModelForm):
 
 class Cause(ModelForm):
     class Meta:
-        model = Statement
+        model = NewComment
 
-        fields = ['cause']
+        fields = ['content']
 
 
 class CommentForm(ModelForm):

@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'HelpDesk.middleware.SimpleMiddleware',
+    'HelpDesk.middleware.LastActionCheckMiddleware',
 
 ]
 
@@ -80,8 +81,12 @@ WSGI_APPLICATION = 'HelpDesk.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'helpdesk',
+        'USER': 'myuser',
+        'PASSWORD': 'mypass',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -124,16 +129,3 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'authenticate.MyUser'
 LOGIN_URL = 'authenticate/login/'
 LOGIN_REDIRECT_URL = '/'
-
-# REST_FRAMEWORK = {
-#   'DEFAULT_AUTHENTICATION_CLASSES': (
-#     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-#   ),
-# }
-#
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.BasicAuthentication',
-#         'rest_framework.authentication.SessionAuthentication',
-#     ]
-# }

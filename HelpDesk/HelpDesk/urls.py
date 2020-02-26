@@ -18,14 +18,8 @@ from django.urls import path, include
 
 from django.contrib import admin
 from django.urls import path
-from rest_framework.routers import DefaultRouter
-
-from application_system import views
 
 
-router = DefaultRouter()
-router.register(r'statementapi', views.StatementViewSet)
-router.register(r'commentapi', views.NewCommentViewSet)
 
 
 
@@ -34,5 +28,5 @@ urlpatterns = [
     path('authenticate/', include('authenticate.urls')),
     path('', include('application_system.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('', include(router.urls)),
+
 ]

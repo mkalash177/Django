@@ -6,10 +6,10 @@ from application_system.models import *
 class StatementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Statement
-        fields = ['id', 'importance', 'topic', 'text', 'user', 'progress']
+        fields = '__all__'
 
 
 class NewCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewComment
-        fields = ['id', 'comments', 'author', 'content']
+        fields = '__all__'

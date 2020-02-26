@@ -8,17 +8,16 @@ class StatementViewSet(viewsets.ModelViewSet):
     queryset = Statement.objects.all().order_by('-importance')
     serializer_class = StatementSerializer
 
-
     def perform_create(self, serializer):
         serializer.save()
 
     def perform_update(self, serializer):
         serializer.save()
 
-class NewCommentViewSet(viewsets.ModelViewSet):
-    queryset = NewComment.objects.all().order_by('-importance')
-    serializer_class = NewCommentSerializer
 
+class NewCommentViewSet(viewsets.ModelViewSet):
+    queryset = NewComment.objects.all()
+    serializer_class = NewCommentSerializer
 
     def perform_create(self, serializer):
         serializer.save()

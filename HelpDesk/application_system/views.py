@@ -11,12 +11,11 @@ from application_system.models import *
 from rest_framework import viewsets
 from application_system.API.serializers import *
 
-# Кнопка Создать Заявку на index.html
+
 class IndexTemplateView(TemplateView):
     template_name = 'application_system/index.html'
 
 
-# Создание заявки
 class StatementCreateView(CreateView):
     model = Statement
     form_class = StatementCreateForm
@@ -34,7 +33,6 @@ class StatementCreateView(CreateView):
     #     return super().post(request, *args, **kwargs)
 
 
-# Изменение заявки
 class StatementChargeView(UpdateView):
     model = Statement
     template_name = 'application_system/statement_change.html'
@@ -42,7 +40,6 @@ class StatementChargeView(UpdateView):
     fields = ['text', 'importance']
 
 
-# Отображает заявки залогиненого юзера
 class StatementListView(ListView):
     model = Statement
     template_name = 'application_system/statement_list.html'
@@ -94,11 +91,8 @@ class AcceptDecision(CreateView, UserPassesTestMixin):
         return redirect(self.success_url)
 
     def test_func(self):
-        self.request_obj = Statement.objects.get(id=self.request.POST.get("pk"))
-        valid_status = [1]
         if self.request.user.is_superuser:
-            if self.request_obj.is_active in valid_status:
-                return True
+            return self.request.user.is_superuser
 
     # def form_valid(self, form):
     #     # item = Decision()
@@ -122,7 +116,7 @@ class AcceptDecisionList(ListView):
     context_object_name = 'accept_lists'
 
 
-class RejectDecision(CreateView,UserPassesTestMixin):
+class RejectDecision(CreateView, UserPassesTestMixin):
     model = Statement
     success_url = '/statement'
     template_name = 'application_system/statement_list.html'
@@ -139,29 +133,24 @@ class RejectDecision(CreateView,UserPassesTestMixin):
         return redirect(self.success_url)
 
     def test_func(self):
-        self.request_obj = Statement.objects.get(id=self.request.POST.get("pk"))
-        valid_status = [2]
         if self.request.user.is_superuser:
-            if self.request_obj.is_active in valid_status:
-                return True
+            return self.request.user.is_superuser
 
 
 class RejectDecisionList(ListView):
     model = Statement
     template_name = 'application_system/reject_decision.html'
-    queryset = Statement.objects.filter(is_active__in=[2, 4])
+    queryset = Statement.objects.filter(is_active__in=[2, 4]).order_by('-importance')
     context_object_name = 'reject_lists'
 
     # def get_context_data(self, *, object_list=None, **kwargs):
     #     context = super().get_context_data(**kwargs)
     #     context.update({
-    #         'comment': DecisionCreateForm
+    #         'cause': Cause
     #     })
     #     return context
 
 
-#### до этого момента пока норм
-#### тут возобновление с ним шаманить
 class RenewCreateView(CreateView):
     model = Statement
     success_url = '/statement'
@@ -171,7 +160,7 @@ class RenewCreateView(CreateView):
     def post(self, request, *args, **kwargs):
         renews = Statement.objects.get(id=kwargs.get('pk'))
         renews.progress = 'В обработке'
-        # renews.comment = self.request.POST.get('comment')
+        # renews.cause = self.request.POST.get('cause')
         renews.is_active = 3
         renews.save()
         return redirect(self.success_url)
@@ -180,11 +169,10 @@ class RenewCreateView(CreateView):
 class RenewListView(ListView):
     model = Statement
     template_name = 'application_system/renew_list.html'
-    queryset = Statement.objects.filter(is_active=3)
+    queryset = Statement.objects.filter(is_active=3).order_by('-importance')
     context_object_name = 'renew_list'
 
 
-##########################################
 class RenewAcceptView(CreateView, UserPassesTestMixin):
     model = Statement
     template_name = "application_system/renew_list.html"
@@ -202,16 +190,13 @@ class RenewAcceptView(CreateView, UserPassesTestMixin):
     # def get_context_data(self, *, object_list=None, **kwargs):
     #     context = super().get_context_data(**kwargs)
     #     context.update({
-    #         'comment': CommentForm
+    #         'cause': Cause
     #     })
     #     return context
 
     def test_func(self):
-        self.request_obj = Statement.objects.get(id=self.request.POST.get("pk"))
-        valid_status = [1]
         if self.request.user.is_superuser:
-            if self.request_obj.is_active in valid_status:
-                return True
+            return self.request.user.is_superuser
 
 
 class RenewARejectView(CreateView, UserPassesTestMixin):
@@ -230,11 +215,8 @@ class RenewARejectView(CreateView, UserPassesTestMixin):
         return redirect(self.success_url)
 
     def test_func(self):
-        self.request_obj = Statement.objects.get(id=self.request.POST.get("pk"))
-        valid_status = [4]
         if self.request.user.is_superuser:
-            if self.request_obj.is_active in valid_status:
-                return True
+            return self.request.user.is_superuser
 
 
 class StatementDetail(DetailView):
@@ -262,27 +244,3 @@ class CommentCreateView(CreateView):
         obj.author = self.request.user
         obj.save()
         return redirect(self.get_success_url())
-
-
-
-
-class StatementViewSet(viewsets.ModelViewSet):
-    queryset = Statement.objects.all().order_by('-importance')
-    serializer_class = StatementSerializer
-
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-    def perform_update(self, serializer):
-        serializer.save()
-
-class NewCommentViewSet(viewsets.ModelViewSet):
-    queryset = NewComment.objects.all().order_by('-importance')
-    serializer_class = NewCommentSerializer
-
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-
