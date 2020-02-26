@@ -13,10 +13,10 @@
                 {% else %}
                     <p class="card-text">Отклонено</p>
                      {% if not request.user.is_superuser %}
-                    <form action="{% url 'renew_decision' r_list.pk %}" method="post">
+                    <form action="{% url 'accept_decision' r_list.pk %}" method="post">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-secondary btn-sm">Возобновить</button>
-                        <input type="hidden" name="is_active" value="0">
+                        <input type="hidden" name="is_active" value="3">
 
                     </form>
                          {% endif %}

@@ -24,11 +24,10 @@ class Statement(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     progress = models.CharField(max_length=100, default='')
     is_active = models.CharField(choices=IS_ACTIVE, max_length=10)
-
+    cause = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f"{self.topic},{self.text}"
-
 
 
 class NewComment(models.Model):
